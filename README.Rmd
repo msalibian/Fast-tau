@@ -1,0 +1,69 @@
+---
+title: "A fast algorithm for tau-estimators"
+author: "Matias Salibian"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## A fast algorithm for tau-estimators for linear regression 
+
+This repository contains `R` (in file FastTau.R) and `MATLAB` / `OCTAVE` 
+(in file FastTau.m) code implementing
+a fast algorithm to compute tau-regression estimators
+as proposed in 
+[Salibian-Barrera, M., Willems, G. and 
+Zamar, R.H. (2008)](http://dx.doi.org/10.1198/106186008X343785). 
+
+Below is an example illustrating its use in `R`. We first 
+read the function:
+```{r initial}
+source('FastTau.R')
+```
+We will apply it to the well-known Boston Housing data set. 
+```{r datasetup}
+data(Boston, package='MASS')
+x <- model.matrix(medv ~ ., data=Boston)
+y <- Boston$medv
+tauest <- FastTau(x=x, y=y, N=500, kk=2, tt=5, rr=2, approximate=0, seed=456)
+```
+The arguments of `fast.s` are:
+
+* y: response vector (n x 1)
+* x: covariates matrix (n x p), possibly including a column of ones (intercept term)
+* N: number of elemental sub-set starts 
+* kk: number of initial IRWLS steps to be applied to each elemental candidate
+* tt: number of best partially iterted candidates to further RWLS-iterate until convergence
+* approximate: if 0, fully compute S-scale when evaluating the objective function, otherwise use an approximation 
+* rr: if `approximate = 1` above, rr is number of iterations used for the scale approximation
+* seed: seed used in the generation of the random sub-samples
+
+This code computes a tau-estimate tuned to have 95% efficiency and 50% breakdown-point, 
+using a rho-function that produces an estimate with small asymptotic maximum bias. 
+The efficiency and breakdown point are controlled with the
+variables 
+`c1`,
+`b1`,
+`c2` and 
+`b2` (lines 35-38 in the file FastTau.R). 
+See [Salibian-Barrera, M., Willems, G. and 
+Zamar, R.H. (2008)](http://dx.doi.org/10.1198/106186008X343785). 
+for more details. 
+
+
+We can compare the S- and LS-estimators:
+```{r compare}
+lmest <- lm(medv ~ ., data=Boston)
+round(cbind(tauest$beta, coef(lmest)), 3)
+```
+The estimated residual scales are
+```{r compareses}
+round(c(tauest$scale, summary(lmest)$sigma), 2)
+```
+
+I will later add here an illustration of the better predictions obtained
+with the robust estimator.
+
