@@ -1,5 +1,5 @@
 
-FastTau <- function(x, y, N=500, kk=2, tt=5, rr=2, approximate=0)
+FastTau <- function(x, y, N=500, kk=2, tt=5, rr=2, approximate=0, seed=123)
 {
   # fast-tau algorithm for linear regression
   #
@@ -20,6 +20,12 @@ FastTau <- function(x, y, N=500, kk=2, tt=5, rr=2, approximate=0)
   #	res$scale : tau-estimate of residual scale
   
   if (tt<1) stop("parameter tt should be at least 1")
+  
+  
+  # save existing random seed
+  if(exists(".Random.seed", where=.GlobalEnv)) old.seed <- .Random.seed
+  
+  if(!missing(seed)) set.seed(seed)
   
   x <- as.matrix(x)
   
@@ -226,6 +232,9 @@ FastTau <- function(x, y, N=500, kk=2, tt=5, rr=2, approximate=0)
       superbesttauscale <- taunew
     }   
   }
+  
+  # restore seed existing before call
+  if(exists('old.seed')) assign('.Random.seed', old.seed, envir=.GlobalEnv)
   
   return(list( beta = superbestbeta, scale = superbesttauscale/sqrt(b2) ))
   
