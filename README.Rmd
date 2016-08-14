@@ -129,3 +129,8 @@ for(i in 1:10) {
 boxplot(mspe.ls, mspe.tau, col=c('gray', 'pink'), names=c('LS', 'Tau'))
 ```
 
+The higher efficiency and comparable robustness properties 
+of the tau-estimator over the S-estimator 
+can be verified comparing the plot above with its
+counterpart for the S-estimator [here](https://github.com/msalibian/Fast-S).
+
