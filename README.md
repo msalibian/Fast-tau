@@ -67,4 +67,47 @@ round(c(tauest$scale, summary(lmest)$sigma), 2)
 
     ## [1] 3.50 4.75
 
-I will later add here an illustration of the better predictions obtained with the robust estimator.
+An interesting experiment is to compare the prediction properties of the robust and least squares estimator. In order to do this, we will use 10-fold CV, and, compare the squared prediction errors of each estimator. To avoid penalizing poor predictions of outlying observations, we will compute the mean squared prediction error of the 75% smallest residuals (in other words, we will use a 25% trimmed mean squared prediction error):
+
+``` r
+tms <- function(e, trim=0.25) {
+  es <- sort(e^2)
+  n <- length(e)
+  return( mean( es[1:floor(n*(1-trim))] ) )
+}
+```
+
+The following chunck of code runs 10-fold CV and computes the tau- and the LS- predictions.
+
+``` r
+n <- dim(x)[1]
+k <- 10
+set.seed(123)
+ii <- sample( (1:n) %% k )
+pr.tau <- pr.ls <- rep(NA, n)
+for(j in 1:k) {
+  trs <- (ii != j)
+  tr.x <- x[ trs, ]
+  tr.y <- y[ trs ]
+  taues <- FastTau(x=tr.x, y=tr.y, N=500, kk=2, tt=5, rr=2, approximate=0, seed=456)
+  lses <- lm(medv ~ ., data=Boston, subset = trs)
+  pr.ls[ !trs ] <- predict(lses, newdata = Boston[ !trs, ])
+  pr.tau[ !trs ] <- as.vector( x[ !trs, ] %*% taues$beta )
+}
+```
+
+The resulting trimmed mean squared prediction errors are
+
+``` r
+tms( (y - pr.ls) )
+```
+
+    ## [1] 7.571167
+
+``` r
+tms( (y - pr.tau) )
+```
+
+    ## [1] 5.026227
+
+showing that the tau-estimator produces better predictions for the majority of the data. This phenomenon is observed when you repeat the above experiment using different 10-fold partitions. Below are the boxplots of the trimmed mean squared prediction errors obtained with 10 runs of the above experiment: ![](README_files/figure-markdown_github/CV2-1.png)
