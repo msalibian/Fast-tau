@@ -1,7 +1,7 @@
 A fast algorithm for tau-estimators
 ================
 Matias Salibian
-2016-08-14
+2016-08-15
 
 A fast algorithm for tau-estimators for linear regression
 ---------------------------------------------------------
@@ -112,4 +112,4 @@ tms( (y - pr.tau) )
 
 showing that the tau-estimator produces better predictions for the majority of the data. This phenomenon is observed when you repeat the above experiment using different 10-fold partitions. Below are the boxplots of the trimmed mean squared prediction errors obtained with 10 runs of the above experiment: ![](README_files/figure-markdown_github/CV2-1.png)
 
-The higher efficiency and comparable robustness properties of the tau-estimator over the S-estimator can be verified comparing the plot above with its counterpart for the S-estimator [here](https://github.com/msalibian/Fast-S).
+The higher efficiency and comparable robustness properties of the tau-estimator over the S-estimator can be verified comparing the plot above with its counterpart for the S-estimator [here](https://github.com/msalibian/Fast-S/blob/master/README.md).
