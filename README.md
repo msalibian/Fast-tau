@@ -1,7 +1,7 @@
 A fast algorithm for tau-estimators
 ================
 Matias Salibian
-2016-08-15
+2016-08-16
 
 A fast algorithm for tau-estimators for linear regression
 ---------------------------------------------------------
@@ -83,7 +83,7 @@ The following chunck of code runs 10-fold CV and computes the tau- and the LS- p
 n <- dim(x)[1]
 k <- 10
 set.seed(123)
-ii <- sample( (1:n) %% k )
+ii <- sample( (1:n) %% k + 1)
 pr.tau <- pr.ls <- rep(NA, n)
 for(j in 1:k) {
   trs <- (ii != j)
@@ -102,13 +102,13 @@ The resulting trimmed mean squared prediction errors are
 tms( (y - pr.ls) )
 ```
 
-    ## [1] 7.571167
+    ## [1] 5.430046
 
 ``` r
 tms( (y - pr.tau) )
 ```
 
-    ## [1] 5.026227
+    ## [1] 3.385839
 
 showing that the tau-estimator produces better predictions for the majority of the data. This phenomenon is observed when you repeat the above experiment using different 10-fold partitions. Below are the boxplots of the trimmed mean squared prediction errors obtained with 10 runs of the above experiment: ![](README_files/figure-markdown_github/CV2-1.png)
 

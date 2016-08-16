@@ -83,7 +83,7 @@ LS- predictions.
 n <- dim(x)[1]
 k <- 10
 set.seed(123)
-ii <- sample( (1:n) %% k )
+ii <- sample( (1:n) %% k + 1)
 pr.tau <- pr.ls <- rep(NA, n)
 for(j in 1:k) {
   trs <- (ii != j)
@@ -112,7 +112,7 @@ mspe.tau <- mspe.ls <- rep(NA, 10)
 k <- 10
 set.seed(456)
 for(i in 1:10) {
-  ii <- sample( (1:n) %% k )
+  ii <- sample( (1:n) %% k + 1)
   pr.tau <- pr.ls <- rep(NA, n)
   for(j in 1:k) {
     trs <- (ii != j)
