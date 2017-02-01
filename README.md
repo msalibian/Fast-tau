@@ -1,7 +1,7 @@
 A fast algorithm for tau-estimators
 ================
 Matias Salibian
-2016-08-22
+2017-02-01
 
 A fast algorithm for tau-estimators for linear regression
 ---------------------------------------------------------
@@ -23,7 +23,7 @@ y <- Boston$medv
 tauest <- FastTau(x=x, y=y, N=500, kk=2, tt=5, rr=2, approximate=0, seed=456)
 ```
 
-The arguments of `fast.s` are:
+The arguments of `FastTau` are:
 
 -   y: response vector (n x 1)
 -   x: covariates matrix (n x p), possibly including a column of ones (intercept term)
